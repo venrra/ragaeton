@@ -7,7 +7,7 @@ Lo que se pretende con este micro-servico es dar facilidades para analizar y eva
 - Lenguaje: `Go`
 
 ## Enlaces de interés
-- [Explicando herramientas usadas](.docs/herramientas.md)
+- [Explicando herramientas usadas](./docs/herramientas.md)
 - [¿Por que usar software libre?](./docs/softwareLibre.md)
 - [Configuración de `git`](./docs/inicialGit.md)
 
