@@ -30,8 +30,8 @@ Para comenzar a desarrollar el proyecto se tienen que tomar unos pasos iniciales
 
 Issue/milestones y  iniciales. A continuación se encuentran las primeras tareas issue y milestones que he creado para seguir la evolución del proyecto de forma ordenada y documentada
 
-- [] [HU 1: consultar si un dirección esta activa o inactiva (ping)](https://github.com/venrra/ragaeton/issues/4): Un usuario podrá obtener información de una dirección dada. pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
-- [] [HU 2: enviar una dirección](https://github.com/venrra/ragaeton/issues/5): Un usuario podrá enviar una dirección cualquiera, y sera recibida y procesada.pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
+- [ ] [HU 1: consultar si un dirección esta activa o inactiva (ping)](https://github.com/venrra/ragaeton/issues/4): Un usuario podrá obtener información de una dirección dada. pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
+- [ ] [HU 2: enviar una dirección](https://github.com/venrra/ragaeton/issues/5): Un usuario podrá enviar una dirección cualquiera, y sera recibida y procesada.pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
 - [x] [Crear fichero IV.yaml](https://github.com/venrra/ragaeton/issues/1): crear y añadir la entidad en el archivo .yamli [iv.yaml](https://github.com/venrra/ragaeton/blob/master/iv.yaml). pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
 - [x] [Crear inicial estructura del proyecto](https://github.com/venrra/ragaeton/issues/2). pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
 - [x] [Documentación parte 1](https://github.com/venrra/ragaeton/issues/3). pertenece a [este milestone](https://github.com/venrra/ragaeton/milestone/1)
