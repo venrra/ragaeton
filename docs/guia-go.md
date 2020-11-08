@@ -31,7 +31,7 @@ Estructura declaración variable:
 -> todas las variables tienen un valor inicial, No esta a null.
 
 - En caso de números `int`=0
-- En caso `string`= cadena vaciá
+- En caso `string`= cadena vacía
 - En caso de `bool`=`false`
 
 -> NO USAR VARIABLES ES MOTIVO DE ERROR DE COMPILACIÓN.
@@ -155,7 +155,17 @@ for{break}
 - sentencia `continue` comienza de nuevo el bucle.
 - sentencia `break`termina el bucle. 
 
-## Arrais, vectores o arreglos
+### iterador
+
+- `for index, dato := range Array_de_datos`
+
+```GO
+    palabras := strings.Split("hola buen señor", "")
+    for _, letra := range palabras
+        Print(letra)
+```
+
+## Arrays, vectores o arreglos
 
 - `var vector [10]int`
 - funciona `fmt.Println(vector)`
@@ -313,7 +323,7 @@ type tutor struct{
 }
 
 func main(){
-    tutor :=Tutor{Humano{"manu"}}
+    tutor :=Tutor{Persona{"manu"}}
     //HEREDA el nombre de Persona
     fmt.Println(tutor.name)
     //también se puede con:
@@ -327,3 +337,267 @@ func main(){
 
 - Es un tipo de dato
 - se define con `type nombre interface{//definiciones de métodos}`
+- se pueden usar en un array
+- Si los métodos de la interfaz están implementados en una estructura esa interfaz ya es usada por la estructura
+- cualquier estructura que implemente la interfaz, sera la interfaz
+
+```go
+type User interface{
+    Permisos() int
+    Nombre() string
+}
+
+type Admin struct{
+    nombre string
+}
+
+func (this Admin) Permisos() int{
+    return 5
+}
+
+func (this Admin) Nombre() string{
+    return this.nombre
+}
+
+func auth(user User) string{
+    if user.Permisos() > 4{
+        return user.Nombre() + " es admin"
+    }
+}
+
+func main(){
+    admin := Admin{"Uriel"}
+    fmt.Println(auth(admin))
+}
+```
+---
+## Concurrencia `go rotine`
+
+- paquetes -> `time`
+- `time.Sleep(1000 * time.Millisecond)`
+- con `go` indicamos que una función se ejecute en una hebra distinta a la principal. Con go creamos tantas hebras como queramos, el compilador se encarga de gestionarlas, borrado y eliminado. solo la definimos
+
+- para ejecutar un bloque de código:
+```go
+go func(){
+    //codigo concurrente
+}()
+```
+
+### channels
+
+- Permite comunicar gorutines unas con otras.  
+Definición:
+
+- `channel := make(chan tipo_dato)`
+
+```go
+channel := make(chan string) 
+go func (channel chan string){
+    var name string
+    for{
+        Scanln(&name)
+        channel <- channel
+    }
+}(channel)
+
+msg := <- channel
+
+print(msg)
+```
+
+----
+
+## leer archivos
+
+Varias bibliotecas:
+
+1. -> importar `io/ioutil`
+
+```go
+file_data, err := ioutil.ReadFile("./file.txt")//tiene que estar en el mismos dir donde se ejecuta.
+
+if err != nil{
+    Print("Error")
+}else{
+    Print(string(file_data)) //imprime todo el archivo
+}
+```
+
+2. -> importar `os`, y `bufio`
+
+Permite leer un archivo linea por linea
+
+```go
+import(
+    "fmt"
+    "bufio"
+)
+
+func main(){
+    file,err := os.Open("./file.txt")
+
+    if err != nil{
+        Print("Error")
+    }
+
+    scanner := bufio.NewScanner(archivo)
+
+    for scanner.Scan(){
+        linea := scanner.Text()
+        Println(linea)
+    }
+
+    file.Close()
+}
+```
+
+## Tratar errores con Defer, panic y recover
+
+- `Defer`: cuando un proceso finaliza de forma abrupta o la ejecución llega al final, con `Defer` nos aseguramos que ese código o función se ejecute al terminar.
+
+- `panic`: imprime a detalle el error que ocurrió. ademas, termina el programa sacando de la pila todas las funciones o proceso por encima de el.
+
+```go
+if err!=nil{
+    panic(err)
+}
+//esto ya no se ejecuta
+```
+
+terminaría la ejecución finalizando main sin que llegase al final.
+
+- `recover`: con `recover` recupera el programa después de un panic.
+
+```go
+func main(){
+    executeReadFile()
+    recover()
+    //esto se puede seguir ejecutando
+}
+
+func executeReadFile(){
+    execute := readFile()
+    print(execute)
+    //esto no se ejecuta después del panic
+}
+
+func readFile() bool
+    file_data, err := ReadFile("./file.txt")
+    if err != nil{
+        panic(err)
+    }
+```
+
+- `recover` también devuelve el error que proboco panic
+
+---
+
+## Web con Paquete http
+
+- importar `net/http`
+- `función http.ListenAndServe(":puerto", )`: lebanta un servidor
+- `http.handleFunc("/", handler)`: indica para una url que hacer `en la funcion handler`
+
+- Funcion handler tiene la sigueinte estructura:
+    - `func handler(w http.ResponseWriter, r *http.Request)`
+    - donde `http.ResponseWriter` es una estructura de string de datos, que usamos apra debolver una `request` http determinado.
+
+```go
+import(
+    "net/http"
+    "io"
+)
+
+func main(){
+    http.HandleFunc("/paht", handler)
+    http.ListenAndServe(":80000", nil) // nil informacion de routing??
+}
+
+func hander(w http.ResponseWriter, r *http.Request){
+    //recive petición y responde
+    io.WriteString(w, "Hola mundo") // escrive el string que se le va a pasar
+}
+```
+
+### Servir archivos estaticos
+
+Forma facil, pasar el archivo
+
+- `http.ServeFile(w,r,"nomnre del archivo")` para que encuentre el archivo se debe ejecuatr en el mismo sitio donde esta el archivo.
+
+Para que un cliente pueda requerir todos los archivos de un dir:
+- `r.URL.Path[1:]`
+    - donde `r` es el request, `URL` extrae la url de r despues del `/` indicando con [1:] que empieze desde el caracter 1.
+    - Esto tienen un problema, se pueden ver todos los archivo incluso los que no queremos.
+
+Para evitarlo, crear parte publica:
+
+- creamod un directorio `public`
+- indicamos que el servidor de archivos comienza en public, asi se combierte en el nuevo espacio de archivos:
+```go
+    fileServer := http.FileServer(http.Dir("public"))
+```
+     - ahroa en usamos la funcion Handle indicando en path desde donde empieza y el espacio que usa
+
+```go
+func main(){
+    fileServer := http.FileServer(http.Dir("public"))
+
+    http.Handle("/", http.StringPrefix("/",fileServer))
+    http.ListenAndServer(":8000",nil)
+}
+```
+
+## Mostrar Estructura en forma de JSON
+
+Go incluye librerias para tratar con json
+
+- import `encodig/json`
+- trasforma estructuras a json
+- los atributos tienen que tener mayuscular si no los coje. Si queremos que la structura json se vea en con otro nombre, lo modemos indicar con:
+    - `Nombre string` ``json: "nombre"`
+
+```go
+//....
+type Asignatura struct{
+    Nombre string ``json: "nombre"
+    Horas int ``json: "nombre"
+}
+
+type Asignaturas []Asignatura
+
+
+func main(){
+    http.HanleFunc("/", func(w http.ResponseWriter, r *http.Request)){
+
+        asignaturas := Asignaturas{
+            Asignatura("spsi", 30),
+            Asignatura("dai", 30),
+            Asignatura("iv", 30),
+        }
+        json.NewEncodig(W).Encode(asignaturas)
+    }
+    //....
+}
+```
+
+## Creación de paquetes
+
+Para crear paquetes que podamos importar debemos crear un directorio con el nombre del paquete, por ejemplo si queremos crear el paquete demo debemos crear un archivo .go dentro de una carpeta demo, donde el archivo comienza con `package demo`. El archivo no tiene por que llamarse igual.  
+no deve contener ninguna funcion `main`
+
+- Las funciones que comienzan por **MINUSCULAS** se tratan como **privadas**
+- Las funciones que comienzan por **MAYUSCULAS** se tratan como **publicas**
+
+- Exixte una funcion de configuarion que se ejecuta cuando comienza el paquete -> `init`
+
+```go
+var nombre string
+
+func init(){
+    nombre = "paquete de prueba"
+}
+```
+
+- Los **atributos o variables** tambien se pueden exportar, con la mismo conbención.
