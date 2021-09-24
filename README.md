@@ -1,7 +1,5 @@
 # Ragaeton
 
-Proyecto Infraestructura Virtual
-
 ## :memo: Descripción
 
 Lo que se pretende con este micro-servicio es dar facilidades para analizar y evaluar el estado de sitios Webs o sitios accesibles desde *Internet*, analizando así, el estado de los puertos o evaluando posibles amenazas o vulnerabilidades que el sitio en cuestión pueda sufrir.
