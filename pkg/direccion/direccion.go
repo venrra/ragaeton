@@ -15,6 +15,11 @@ func comprobar_mask_valida(ip string) (bool, error) {
 	return regexp.MatchString(expresion_ip, mask)
 }
 
+func (msk Direccion) comprobar_mask_valida2() (bool, error) {
+	expresion_mask := "^/[0-64]$"
+	return regexp.MatchString(expresion_mask, dir.mask)
+}
+
 type Direccion struct {
 	ip      string
 	mask	string
